@@ -1,6 +1,25 @@
 from django.db import models
 import uuid
 
+class GameConfig(models.Model):
+    max_turns = models.PositiveIntegerField(default=10)
+
+    class Meta:
+        verbose_name = "Game Configuration"
+        verbose_name_plural = "Game Configuration"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
+
+    def __str__(self):
+        return f"Game Config (max turns: {self.max_turns})"
+
 class GameRoom(models.Model):
     code = models.CharField(max_length=8, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -15,6 +34,8 @@ class Player(models.Model):
     is_host = models.BooleanField(default=False)
     is_finished = models.BooleanField(default=False)
     last_seen = models.DateTimeField(auto_now=True)  # Updated every time player sends data
+    cards_to_deal = models.PositiveIntegerField(default=5)
+    consecutive_correct_plays = models.PositiveIntegerField(default=0)  # Tracks streak for accuracy scaling
 
     def __str__(self):
         return self.nickname

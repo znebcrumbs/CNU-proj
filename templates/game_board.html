@@ -14,57 +14,264 @@
             overflow-x: hidden;
         }
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             background: linear-gradient(145deg, #2d3561 0%, #1e2547 100%);
             border: 4px solid #4a5568;
             padding: 25px;
             box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
             border-radius: 8px;
-            position: relative;
         }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 3px dashed #4facfe; padding-bottom: 15px; }
-        .section { margin-bottom: 20px; border: 3px solid #4a5568; padding: 15px; background: rgba(22, 33, 62, 0.8); border-radius: 8px; }
-        .section-title { font-size: 10px; color: #4facfe; margin-bottom: 10px; }
-        #battle-zone { 
-            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
-            border: 3px solid #ffd700;
-            padding: 30px;
+        .header {
             text-align: center;
-            font-size: 14px;
-            color: #ffd700;
-            margin: 15px 0;
-            border-radius: 4px;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 20px;
+            border-bottom: 3px dashed #4facfe;
+            padding-bottom: 15px;
         }
-        #player-hand { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 15px; }
-        .game-card {
-            width: 100px;
-            height: 140px;
-            border: 3px solid #82b1ff;
-            background: linear-gradient(145deg, #2962ff 0%, #0039cb 100%);
-            color: #fff;
+        .section {
+            margin-bottom: 20px;
+            border: 3px solid #4a5568;
+            padding: 15px;
+            background: rgba(22, 33, 62, 0.8);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 9px;
-            text-align: center;
-            padding: 10px;
-            transition: all 0.2s;
-            box-shadow: 0 4px 0 #002171;
         }
-        .game-card:hover { transform: translateY(-5px); box-shadow: 0 8px 0 #002171; }
-        .accuracy-container { margin: 15px 0; }
+        .section-title { font-size: 10px; color: #4facfe; margin-bottom: 12px; }
+
+        /* ── Accuracy bar ── */
+        .accuracy-container { margin: 10px 0; }
         .accuracy-bar { height: 20px; background: #4a5568; border-radius: 10px; width: 100%; overflow: hidden; border: 2px solid #fff; }
         .accuracy-fill { height: 100%; background: #00c853; width: 0%; transition: width 0.5s; }
+
+        /* ── Battle zone (holds function card) ── */
+        #battle-zone {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 390px;
+            padding: 10px 0;
+        }
+
+        /* ── Function Card ── */
+        .func-card {
+            width: 250px;
+            height: 382px;
+            background: linear-gradient(#2b63c6, #1e3f8a);
+            border-radius: 15px;
+            border: 5px solid #163c5a;
+            position: relative;
+            box-shadow: inset 0 0 0 2px #4fa4ff, 0 10px 30px rgba(0,0,0,.6);
+            flex-shrink: 0;
+        }
+        .func-card .corner {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: #c8c6ff;
+            position: absolute;
+            top: 8px;
+        }
+        .func-card .corner.left  { left: 8px; }
+        .func-card .corner.right { right: 8px; }
+        .func-card .stars {
+            display: flex;
+            justify-content: center;
+            margin-top: 38px;
+            gap: 6px;
+        }
+        .func-card .star     { color: gold; font-size: 22px; }
+        .func-card .star.big { font-size: 30px; }
+        .func-card .image-frame {
+            width: 190px; height: 125px;
+            margin: 18px auto 12px;
+            border: 2px solid #f3b458;
+            background: linear-gradient(90deg, #3f6fb8, #081d7c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+        .func-card .image-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .func-card .image-placeholder {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.25);
+        }
+        .func-card .description {
+            text-align: center;
+            color: #ffd700;
+            font-size: 7px;
+            letter-spacing: 1px;
+            padding: 0 12px;
+            line-height: 1.6;
+            font-family: 'Press Start 2P', monospace;
+        }
+        .func-card .bar {
+            width: 180px; height: 11px;
+            border-radius: 20px;
+            margin: 10px auto 0;
+            border: 1px solid #9fd7ff;
+            overflow: hidden;
+        }
+        .func-card .bar-fill {
+            height: 100%;
+            width: 70%;
+            background: repeating-linear-gradient(90deg, #2e8cff, #2e8cff 6px, #1c5fd1 6px, #1c5fd1 12px);
+        }
+        .func-card .logo {
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            color: #7ad8ff;
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        /* ── Player hand ── */
+        #player-hand {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px 0;
+        }
+
+        /* ── Part Card (card-detail) ── */
+        .card-detail {
+            width: 170px;
+            height: 260px;
+            background: linear-gradient(#2f5ea7, #244c8d);
+            border-radius: 14px;
+            border: 4px solid #163c5a;
+            position: relative;
+            padding: 10px;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            box-shadow: inset 0 0 0 2px #4fa4ff, 0 8px 20px rgba(0,0,0,.6);
+            cursor: pointer;
+            transition: transform .18s, box-shadow .18s;
+            flex-shrink: 0;
+        }
+        .card-detail:hover { transform: translateY(-8px); box-shadow: inset 0 0 0 2px #4fa4ff, 0 16px 28px rgba(0,0,0,.7); }
+
+        /* Category colours */
+        .card-detail.optical {
+            background: linear-gradient(#a72f2f, #8d2424);
+            border-color: #5a1616;
+            box-shadow: inset 0 0 0 2px #ff4f4f, 0 8px 20px rgba(0,0,0,.6);
+        }
+        .card-detail.optical:hover  { box-shadow: inset 0 0 0 2px #ff4f4f, 0 16px 28px rgba(0,0,0,.7); }
+        .card-detail.illuminating {
+            background: linear-gradient(#2f8a50, #246e3d);
+            border-color: #165a2a;
+            box-shadow: inset 0 0 0 2px #4fff8a, 0 8px 20px rgba(0,0,0,.6);
+        }
+        .card-detail.illuminating:hover { box-shadow: inset 0 0 0 2px #4fff8a, 0 16px 28px rgba(0,0,0,.7); }
+
+        .card-detail .corner {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: #c8c6ff;
+            position: absolute;
+            top: 6px;
+        }
+        .card-detail .corner.left  { left: 6px; }
+        .card-detail .corner.right { right: 6px; }
+
+        .card-detail .stars {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+            gap: 3px;
+        }
+        .card-detail .star     { color: gold; font-size: 12px; }
+        .card-detail .star.big { font-size: 17px; }
+
+        .card-detail .top-section {
+            display: flex;
+            margin-top: 8px;
+            gap: 8px;
+        }
+        .card-detail .item-image {
+            width: 58px; height: 58px;
+            border: 2px solid #f3b458;
+            background: linear-gradient(90deg, #3f6fb8, #081d7c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .card-detail.optical .item-image     { background: linear-gradient(90deg, #7c0808, #3b0000); }
+        .card-detail.illuminating .item-image { background: linear-gradient(90deg, #087c2e, #003b10); }
+        .card-detail .item-image img { width: 100%; height: 100%; object-fit: cover; }
+        .card-detail .placeholder {
+            width: 28px; height: 28px;
+            background: rgba(255,255,255,.25);
+            border-radius: 6px;
+        }
+
+        .card-detail .stats { flex: 1; }
+        .card-detail .stat  { margin-bottom: 8px; }
+        .card-detail .label {
+            font-size: 5px;
+            letter-spacing: 1px;
+            font-family: 'Press Start 2P', monospace;
+            color: #cde;
+        }
+        .card-detail .stat-bar {
+            margin-top: 3px;
+            width: 100%;
+            height: 6px;
+            background: #1a1a2e;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .card-detail .fill { height: 100%; }
+        .card-detail .fill.accuracy {
+            width: 70%;
+            background: linear-gradient(90deg, red 0%, red 25%, orange 25%, yellow 50%, green 75%);
+        }
+        .card-detail .fill.speed {
+            width: 65%;
+            background: linear-gradient(90deg, red 0%, orange 30%, yellow 50%, green 70%);
+        }
+
+        .card-detail .description {
+            margin-top: 10px;
+            border: 2px solid #f3b458;
+            padding: 6px 4px;
+            text-align: center;
+            background: linear-gradient(90deg, #3f6fb8, #081d7c);
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 6px;
+            line-height: 1.5;
+            font-family: 'Press Start 2P', monospace;
+        }
+        .card-detail.optical .description     { background: linear-gradient(90deg, #7c0808, #3b0000); }
+        .card-detail.illuminating .description { background: linear-gradient(90deg, #087c2e, #003b10); }
+
+        .card-detail .logo {
+            position: absolute;
+            bottom: 6px;
+            width: 100%;
+            left: 0;
+            text-align: center;
+            font-size: 8px;
+            font-weight: bold;
+            color: #7ad8ff;
+            font-family: 'Press Start 2P', monospace;
+            letter-spacing: 1px;
+        }
+        .card-detail.optical .logo     { color: #ffb3b3; }
+        .card-detail.illuminating .logo { color: #b3ffcf; }
+
+        /* ── Status / finish button ── */
         #status { text-align: center; font-size: 10px; color: #4facfe; margin-top: 10px; height: 20px; }
-        
         button {
             width: 100%;
             padding: 15px;
@@ -79,9 +286,13 @@
             box-shadow: 0 6px 0 #007a33;
             margin-top: 20px;
         }
-        button:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #007a33; }
-        button:active { transform: translateY(4px); box-shadow: 0 2px 0 #007a33; }
-        button.finish-btn { background: linear-gradient(145deg, #2962ff 0%, #0039cb 100%); box-shadow: 0 6px 0 #002171; display: none; }
+        button:hover  { transform: translateY(-2px); box-shadow: 0 8px 0 #007a33; }
+        button:active { transform: translateY(4px);  box-shadow: 0 2px 0 #007a33; }
+        button.finish-btn {
+            background: linear-gradient(145deg, #2962ff 0%, #0039cb 100%);
+            box-shadow: 0 6px 0 #002171;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -95,7 +306,7 @@
             <div class="section-title">📊 WATER POLLUTION ANALYSIS ACCURACY</div>
             <div class="accuracy-container">
                 <div class="accuracy-bar"><div id="accuracy-fill" class="accuracy-fill"></div></div>
-                <div style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 5px;">
+                <div style="display:flex;justify-content:space-between;font-size:10px;margin-top:5px;">
                     <span id="turns-text">TURNS: 0/10</span>
                     <span id="accuracy-text">0%</span>
                 </div>
@@ -104,7 +315,9 @@
 
         <div class="section">
             <div class="section-title">📡 CURRENT OBJECTIVE</div>
-            <div id="battle-zone">INITIALIZING MISSION...</div>
+            <div id="battle-zone">
+                <div style="color:#ffd700;font-size:12px;font-family:'Press Start 2P',monospace;">INITIALIZING MISSION...</div>
+            </div>
         </div>
 
         <div class="section">
@@ -113,64 +326,158 @@
         </div>
 
         <div id="status"></div>
-        
-        <button id="finish-btn" class="finish-btn">► FINISH MISSION & VIEW LEADERBOARD ◄</button>
+        <button id="finish-btn" class="finish-btn">► FINISH MISSION &amp; VIEW LEADERBOARD ◄</button>
     </div>
 
     <script>
         const roomCode = "{{ room_code }}";
         let currentObjectiveId = null;
         let cardsDisabled = false;
+        let maxTurns = 10;
 
         function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
+            if (!document.cookie) return null;
+            const match = document.cookie.split(';')
+                .map(c => c.trim())
+                .find(c => c.startsWith(name + '='));
+            return match ? decodeURIComponent(match.slice(name.length + 1)) : null;
         }
         const csrftoken = getCookie('csrftoken');
 
-        async function startMission() {
-            const response = await fetch(`/api/room/${roomCode}/start/`, {
-                method: 'POST',
-                headers: { 'X-CSRFToken': csrftoken }
-            });
-            const data = await response.json();
-
-            if (!response.ok) {
-                document.getElementById('battle-zone').textContent = data.error || "Failed to start mission.";
-                return;
-            }
-
-            renderHand(data.hand);
-            document.getElementById('battle-zone').textContent = data.objective;
-            currentObjectiveId = data.objective_id;
-            updateAccuracy(data.accuracy);
-            document.getElementById('turns-text').textContent = `TURNS: ${data.turns_played}/10`;
-
-            if (data.turns_played >= 10) {
-                showGameOver();
-            }
+        function setBattleZoneError(msg) {
+            const errDiv = document.createElement('div');
+            errDiv.style.cssText = "color:#ff4f4f;font-size:10px;font-family:'Press Start 2P',monospace;text-align:center;";
+            errDiv.textContent = msg;
+            document.getElementById('battle-zone').replaceChildren(errDiv);
         }
 
+        /* ── Function Card renderer ── */
+        function renderFunctionCard(cardName, description, image) {
+            const zone = document.getElementById('battle-zone');
+            zone.innerHTML = '';
+
+            const card = document.createElement('div');
+            card.className = 'func-card';
+
+            const cL = document.createElement('div'); cL.className = 'corner left';
+            const cR = document.createElement('div'); cR.className = 'corner right';
+
+            const stars = document.createElement('div');
+            stars.className = 'stars';
+            stars.innerHTML = '<span class="star">★</span><span class="star big">★</span><span class="star">★</span>';
+
+            const frame = document.createElement('div');
+            frame.className = 'image-frame';
+            if (image) {
+                const img = document.createElement('img');
+                img.src = image; img.alt = cardName;
+                frame.appendChild(img);
+            } else {
+                const ph = document.createElement('div'); ph.className = 'image-placeholder';
+                frame.appendChild(ph);
+            }
+
+            const desc = document.createElement('div');
+            desc.className = 'description';
+            desc.textContent = description;
+
+            const bar = document.createElement('div'); bar.className = 'bar';
+            const fill = document.createElement('div'); fill.className = 'bar-fill';
+            bar.appendChild(fill);
+
+            const logo = document.createElement('div');
+            logo.className = 'logo';
+            logo.textContent = 'HAWAK-KARD';
+
+            card.append(cL, cR, stars, frame, desc, bar, logo);
+            zone.appendChild(card);
+        }
+
+        /* ── Part Card renderer ── */
+        const CATEGORY_CLASS = { OPT: 'optical', MECH: '', ILL: 'illuminating' };
+
         function renderHand(cards) {
-            const hand = document.getElementById("player-hand");
-            hand.innerHTML = "";
+            const hand = document.getElementById('player-hand');
+            hand.innerHTML = '';
             cards.forEach(card => {
-                const div = document.createElement("div");
-                div.className = "game-card";
-                div.textContent = card.name;
+                const catClass = CATEGORY_CLASS[card.category] || '';
+                const div = document.createElement('div');
+                div.className = ('card-detail ' + catClass).trim();
                 div.onclick = () => { if (!cardsDisabled) playCard(card.id); };
+
+                const cL = document.createElement('div'); cL.className = 'corner left';
+                const cR = document.createElement('div'); cR.className = 'corner right';
+
+                const stars = document.createElement('div');
+                stars.className = 'stars';
+                stars.innerHTML = '<span class="star">★</span><span class="star big">★</span><span class="star">★</span>';
+
+                const topSection = document.createElement('div');
+                topSection.className = 'top-section';
+
+                const itemImg = document.createElement('div');
+                itemImg.className = 'item-image';
+                if (card.image) {
+                    const img = document.createElement('img');
+                    img.src = card.image; img.alt = card.name;
+                    itemImg.appendChild(img);
+                } else {
+                    const ph = document.createElement('div'); ph.className = 'placeholder';
+                    itemImg.appendChild(ph);
+                }
+
+                const stats = document.createElement('div');
+                stats.className = 'stats';
+                stats.innerHTML = `
+                    <div class="stat">
+                        <span class="label">ACCURACY</span>
+                        <div class="stat-bar"><div class="fill accuracy"></div></div>
+                    </div>
+                    <div class="stat">
+                        <span class="label">SPEED</span>
+                        <div class="stat-bar"><div class="fill speed"></div></div>
+                    </div>`;
+
+                topSection.appendChild(itemImg);
+                topSection.appendChild(stats);
+
+                const desc = document.createElement('div');
+                desc.className = 'description';
+                desc.textContent = card.name;
+
+                const logo = document.createElement('div');
+                logo.className = 'logo';
+                logo.textContent = 'HAWAK-KARD';
+
+                div.append(cL, cR, stars, topSection, desc, logo);
                 hand.appendChild(div);
             });
+        }
+
+        async function startMission() {
+            try {
+                const response = await fetch(`/api/room/${roomCode}/start/`, {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken }
+                });
+                const data = await response.json();
+
+                if (!response.ok) {
+                    setBattleZoneError(data.error || 'Failed to start mission.');
+                    return;
+                }
+
+                maxTurns = data.max_turns || 10;
+                renderFunctionCard(data.objective_name, data.objective, data.objective_image);
+                currentObjectiveId = data.objective_id;
+                renderHand(data.hand);
+                updateAccuracy(data.accuracy);
+                document.getElementById('turns-text').textContent = `TURNS: ${data.turns_played}/${maxTurns}`;
+
+                if (data.turns_played >= maxTurns) showGameOver();
+            } catch (err) {
+                setBattleZoneError('CONNECTION ERROR. PLEASE REFRESH.');
+            }
         }
 
         async function playCard(cardId) {
@@ -178,46 +485,40 @@
             try {
                 const response = await fetch(`/api/room/${roomCode}/play/`, {
                     method: 'POST',
-                    headers: { 
-                        'X-CSRFToken': csrftoken,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        part_card_id: cardId,
-                        objective_id: currentObjectiveId
-                    })
+                    headers: { 'X-CSRFToken': csrftoken, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ part_card_id: cardId, objective_id: currentObjectiveId })
                 });
-
                 const data = await response.json();
 
                 if (!response.ok) {
-                    updateStatus("ERROR: " + (data.error || "Unknown error"));
+                    updateStatus('ERROR: ' + (data.error || 'Unknown error'));
                     cardsDisabled = false;
                     return;
                 }
 
                 updateStatus(data.result.toUpperCase());
                 updateAccuracy(data.accuracy);
-                document.getElementById('turns-text').textContent = `TURNS: ${data.turns_played}/10`;
+                document.getElementById('turns-text').textContent = `TURNS: ${data.turns_played}/${maxTurns}`;
 
                 if (data.game_over) {
                     showGameOver();
                 } else {
-                    renderHand(data.hand);
-                    document.getElementById('battle-zone').textContent = data.next_objective;
+                    renderFunctionCard(data.next_objective_name, data.next_objective, data.next_objective_image);
                     currentObjectiveId = data.next_objective_id;
+                    renderHand(data.hand);
                     cardsDisabled = false;
                 }
             } catch (err) {
-                updateStatus("ERROR: Network failure");
+                updateStatus('ERROR: Network failure');
                 cardsDisabled = false;
             }
         }
 
         function showGameOver() {
             document.getElementById('finish-btn').style.display = 'block';
-            document.getElementById('battle-zone').textContent = "MISSION OBJECTIVES COMPLETE!";
-            document.getElementById('player-hand').innerHTML = "";
+            document.getElementById('battle-zone').innerHTML =
+                '<div style="color:#ffd700;font-size:12px;font-family:\'Press Start 2P\',monospace;text-align:center;">MISSION OBJECTIVES COMPLETE!</div>';
+            document.getElementById('player-hand').innerHTML = '';
             cardsDisabled = true;
         }
 
@@ -227,17 +528,18 @@
         }
 
         function updateStatus(msg) {
-            const status = document.getElementById("status");
-            status.textContent = `► ${msg}`;
-            status.style.color = msg === 'CORRECT' ? '#00c853' : '#ff1744';
-            setTimeout(() => { if (status.textContent === `► ${msg}`) status.textContent = ""; }, 2000);
+            const el = document.getElementById('status');
+            el.textContent = `► ${msg}`;
+            el.style.color = msg === 'CORRECT' ? '#00c853' : '#ff1744';
+            setTimeout(() => { if (el.textContent === `► ${msg}`) el.textContent = ''; }, 2000);
         }
 
         document.getElementById('finish-btn').onclick = async () => {
-            await fetch(`/api/room/${roomCode}/finish/`, {
-                method: 'POST',
-                headers: { 'X-CSRFToken': csrftoken }
-            });
+            try {
+                await fetch(`/api/room/${roomCode}/finish/`, {
+                    method: 'POST', headers: { 'X-CSRFToken': csrftoken }
+                });
+            } catch (_) { /* best-effort */ }
             window.location.href = `/room/${roomCode}/`;
         };
 

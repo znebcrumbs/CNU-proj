@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import (
+    GameConfig,
     GameRoom,
     Player,
     PartCard,
@@ -7,6 +8,16 @@ from .models import (
     SpecialCard,
     PlayerCard
 )
+@admin.register(GameConfig)
+class GameConfigAdmin(admin.ModelAdmin):
+    list_display = ("max_turns",)
+
+    def has_add_permission(self, request):
+        return not GameConfig.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 @admin.register(GameRoom)
 class GameRoomAdmin(admin.ModelAdmin):
     list_display = ("code", "created_at")
