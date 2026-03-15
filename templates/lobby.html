@@ -2,52 +2,75 @@
 <html>
 <head>
     <title>HAWAK-KARD - 8-bit Lab Adventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-            * {
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #d4a574 0%, #c9945e 50%, #8b7355 100%);
-            color: #3d2817;
-            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+            font-family: 'Press Start 2P', monospace;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: auto;
-            padding: 20px;
+            overflow: hidden;
             position: relative;
         }
 
-        .rotating-earth {
+        /* Pixel grid overlay */
+        body::before {
+            content: '';
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 500px;
-            height: 500px;
-            opacity: 0.25;
-            animation: rotate 300s linear infinite;
-            z-index: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.1) 0px,
+                    rgba(0, 0, 0, 0.1) 2px,
+                    transparent 2px,
+                    transparent 4px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(0, 0, 0, 0.1) 0px,
+                    rgba(0, 0, 0, 0.1) 2px,
+                    transparent 2px,
+                    transparent 4px
+                );
             pointer-events: none;
-            filter: brightness(1.2);
+            z-index: 2;
         }
 
-        @keyframes rotate {
-            0% { transform: translate(-50%, -50%) rotateY(0deg); }
-            100% { transform: translate(-50%, -50%) rotateY(360deg); }
+        /* City skyline at bottom */
+        .city-skyline {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: 
+                linear-gradient(180deg, transparent 0%, #0a0a1a 100%),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 120'%3E%3Crect fill='%230a0a1a' x='0' y='80' width='60' height='40'/%3E%3Crect fill='%230a0a1a' x='70' y='50' width='50' height='70'/%3E%3Crect fill='%230a0a1a' x='130' y='70' width='70' height='50'/%3E%3Crect fill='%230a0a1a' x='210' y='40' width='60' height='80'/%3E%3Crect fill='%230a0a1a' x='280' y='60' width='50' height='60'/%3E%3Crect fill='%230a0a1a' x='340' y='30' width='80' height='90'/%3E%3Crect fill='%230a0a1a' x='430' y='55' width='55' height='65'/%3E%3Crect fill='%230a0a1a' x='495' y='25' width='65' height='95'/%3E%3Crect fill='%230a0a1a' x='570' y='65' width='50' height='55'/%3E%3Crect fill='%230a0a1a' x='630' y='45' width='70' height='75'/%3E%3Crect fill='%230a0a1a' x='710' y='70' width='60' height='50'/%3E%3Crect fill='%230a0a1a' x='780' y='35' width='55' height='85'/%3E%3Crect fill='%230a0a1a' x='845' y='55' width='65' height='65'/%3E%3Crect fill='%230a0a1a' x='920' y='40' width='80' height='80'/%3E%3Crect fill='%23ffd700' x='85' y='60' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='105' y='75' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='365' y='45' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='385' y='60' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='520' y='40' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='540' y='55' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='805' y='50' width='8' height='8'/%3E%3Crect fill='%23ffd700' x='825' y='65' width='8' height='8'/%3E%3C/svg%3E");
+            background-repeat: repeat-x;
+            background-size: 1000px 120px;
+            z-index: 1;
+            pointer-events: none;
         }
 
         #earth-container {
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100vw;
-            height: 50vh;
+            height: 100vh;
             z-index: 0;
             overflow: hidden;
             display: flex;
@@ -57,93 +80,184 @@
 
         #earth-container canvas {
             display: block !important;
-            width: 80vw !important;
-            height: 80vh !important;
+            width: 100vw !important;
+            height: 100vh !important;
             margin: 0 !important;
             padding: 0 !important;
-            aspect-ratio: auto !important;
         }
 
+        /* Main card container */
         .container {
-            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
-            border: 4px solid #8b6f47;
+            background: linear-gradient(145deg, #2d3561 0%, #1e2547 100%);
+            border: 4px solid #4a5568;
             padding: 30px;
             max-width: 500px;
-            box-shadow: 0 0 20px rgba(139, 111, 71, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 
+                0 0 0 4px #1a1a2e,
+                0 0 0 8px #4a5568,
+                0 0 30px rgba(79, 172, 254, 0.4),
+                inset 0 0 20px rgba(0, 0, 0, 0.3);
             position: relative;
-            z-index: 1;
+            z-index: 10;
+            border-radius: 8px;
+        }
+
+        /* Pixel corner decorations */
+        .container::before,
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 4px solid #ffd700;
         }
 
         .container::before {
-            content: '';
+            top: -4px;
+            left: -4px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .container::after {
+            bottom: -4px;
+            right: -4px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .corner-decoration {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(139, 111, 71, 0.03) 0px,
-                    rgba(139, 111, 71, 0.03) 2px,
-                    transparent 2px,
-                    transparent 4px
-                ),
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(139, 111, 71, 0.03) 0px,
-                    rgba(139, 111, 71, 0.03) 2px,
-                    transparent 2px,
-                    transparent 4px
-                );
-            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border: 4px solid #ffd700;
+        }
+
+        .corner-decoration.top-right {
+            top: -4px;
+            right: -4px;
+            border-left: none;
+            border-bottom: none;
+        }
+
+        .corner-decoration.bottom-left {
+            bottom: -4px;
+            left: -4px;
+            border-right: none;
+            border-top: none;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             position: relative;
             z-index: 1;
         }
 
-        .title {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #5d4e37;
-            letter-spacing: 3px;
+        /* Logo styling */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        .pixel-art-earth {
-            display: inline-block;
-            margin: 20px 0;
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, #4facfe 0%, #00f2fe 100%);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 10px rgba(79, 172, 254, 0.6);
+        }
+
+        .title {
             font-size: 20px;
-            line-height: 20px;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 2px;
+            text-shadow: 
+                3px 3px 0 #000,
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
         }
 
         .subtitle {
-            font-size: 14px;
-            color: #5d4e37;
+            font-size: 10px;
+            color: #4facfe;
             margin-bottom: 20px;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 0 #000;
         }
 
-        .leaves {
+        /* Pixel art earth */
+        .pixel-art-earth {
+            display: inline-block;
+            margin: 15px 0;
+            font-size: 48px;
+            line-height: 1;
+            filter: drop-shadow(3px 3px 0 #000);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Star rating */
+        .star-rating {
             display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
+            justify-content: center;
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .star {
+            color: #ffd700;
+            font-size: 20px;
+            text-shadow: 2px 2px 0 #000;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .star:nth-child(2) { animation-delay: 0.2s; }
+        .star:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.9); }
+        }
+
+        /* Lab elements */
+        .lab-elements {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
             font-size: 24px;
         }
 
-        .leaf {
-            animation: sway 3s ease-in-out infinite;
+        .lab-icon {
+            filter: drop-shadow(2px 2px 0 #000);
+            animation: bounce 2s ease-in-out infinite;
         }
 
-        @keyframes sway {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(5deg); }
+        .lab-icon:nth-child(2) { animation-delay: 0.3s; }
+        .lab-icon:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
+        /* Form styling */
         .form-group {
             margin-bottom: 20px;
             position: relative;
@@ -153,114 +267,226 @@
         label {
             display: block;
             margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 10px;
             letter-spacing: 1px;
-            color: #5d4e37;
-            font-weight: bold;
+            color: #4facfe;
+            text-shadow: 2px 2px 0 #000;
         }
 
         input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #8b6f47;
-            background: rgba(255, 255, 255, 0.8);
-            color: #3d2817;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
+            padding: 15px;
+            border: 3px solid #4a5568;
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
             box-sizing: border-box;
+            box-shadow: 
+                inset 3px 3px 5px rgba(0, 0, 0, 0.5),
+                0 0 0 2px #1a1a2e;
+            border-radius: 4px;
         }
 
         input::placeholder {
-            color: #9d8a6d;
+            color: #4a5568;
         }
 
         input:focus {
             outline: none;
-            box-shadow: 0 0 10px rgba(139, 111, 71, 0.4);
-            background: rgba(255, 255, 255, 0.95);
+            border-color: #4facfe;
+            box-shadow: 
+                inset 3px 3px 5px rgba(0, 0, 0, 0.5),
+                0 0 15px rgba(79, 172, 254, 0.5),
+                0 0 0 2px #1a1a2e;
         }
 
+        /* Pixel button */
         button {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #c4a57b 0%, #9d8b6d 100%);
+            padding: 18px;
+            background: linear-gradient(145deg, #00c853 0%, #00a344 100%);
             color: #fff;
-            border: 3px solid #5d4e37;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
+            border: none;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             letter-spacing: 2px;
-            transition: all 0.1s;
-            box-shadow: 3px 3px 0 rgba(93, 78, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 1;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: 
+                0 6px 0 #007a33,
+                0 8px 10px rgba(0, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            transition: all 0.1s;
         }
 
         button:hover {
-            background: linear-gradient(135deg, #d4a574 0%, #a89d70 100%);
-            box-shadow: 5px 5px 0 rgba(93, 78, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            transform: translate(-2px, -2px);
+            background: linear-gradient(145deg, #00e676 0%, #00c853 100%);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 0 #007a33,
+                0 10px 15px rgba(0, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
         }
 
         button:active {
-            box-shadow: 1px 1px 0 rgba(93, 78, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transform: translate(1px, 1px);
+            transform: translateY(4px);
+            box-shadow: 
+                0 2px 0 #007a33,
+                0 4px 5px rgba(0, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2);
         }
 
+        /* Error message */
         .error {
-            color: #8b3a3a;
-            background: rgba(255, 200, 200, 0.7);
-            border: 2px solid #8b3a3a;
-            padding: 10px;
+            color: #ff5252;
+            background: linear-gradient(145deg, #3d1f1f 0%, #2d1515 100%);
+            border: 3px solid #ff5252;
+            padding: 15px;
             margin-bottom: 20px;
-            font-size: 12px;
+            font-size: 10px;
             position: relative;
             z-index: 1;
+            text-shadow: 1px 1px 0 #000;
+            box-shadow: 
+                0 0 10px rgba(255, 82, 82, 0.3),
+                inset 0 0 10px rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
         }
 
-        .lab-elements {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
-            font-size: 20px;
-        }
-
+        /* Footer text */
         .footer-text {
             text-align: center;
             margin-top: 20px;
-            font-size: 12px;
-            color: #5d4e37;
-            letter-spacing: 1px;
+            font-size: 8px;
+            color: #4facfe;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #000;
             position: relative;
             z-index: 1;
         }
+
+        /* Decorative cards */
+        .decorative-cards {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 5;
+        }
+
+        .decorative-cards.left {
+            left: 20px;
+        }
+
+        .decorative-cards.right {
+            right: 20px;
+        }
+
+        .mini-card {
+            width: 60px;
+            height: 80px;
+            border-radius: 6px;
+            border: 3px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 
+                0 4px 0 rgba(0, 0, 0, 0.4),
+                0 0 10px rgba(0, 0, 0, 0.3);
+            animation: cardFloat 3s ease-in-out infinite;
+        }
+
+        .mini-card.blue {
+            background: linear-gradient(145deg, #2962ff 0%, #0039cb 100%);
+            border-color: #82b1ff;
+        }
+
+        .mini-card.green {
+            background: linear-gradient(145deg, #00c853 0%, #009624 100%);
+            border-color: #69f0ae;
+        }
+
+        .mini-card.red {
+            background: linear-gradient(145deg, #ff1744 0%, #c4001d 100%);
+            border-color: #ff8a80;
+        }
+
+        .mini-card:nth-child(2) { animation-delay: 0.5s; }
+        .mini-card:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .decorative-cards {
+                display: none;
+            }
+            
+            .container {
+                margin: 20px;
+                max-width: 100%;
+            }
+            
+            .title {
+                font-size: 16px;
+            }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<base target="_blank">
 </head>
 <body>
-    <div id="earth-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></div>
-    <div class="rotating-earth" style="display: none;"></div>
+    <!-- Decorative cards on sides -->
+    <div class="decorative-cards left">
+        <div class="mini-card blue">🔬</div>
+        <div class="mini-card green">🧪</div>
+    </div>
+    <div class="decorative-cards right">
+        <div class="mini-card red">⚗️</div>
+        <div class="mini-card blue">📡</div>
+    </div>
+
+    <!-- City skyline -->
+    <div class="city-skyline"></div>
+
+    <!-- Three.js Earth background -->
+    <div id="earth-container"></div>
+
+    <!-- Main container -->
     <div class="container">
+        <div class="corner-decoration top-right"></div>
+        <div class="corner-decoration bottom-left"></div>
+        
         <div class="header">
-            <div class="title">⚗ HAWAK-KARD ⚗</div>
+            <div class="logo-container">
+                <div class="logo-icon">💧</div>
+                <div class="title">HAWAK-KARD</div>
+            </div>
             <div class="subtitle">8-BIT LAB ADVENTURE</div>
             
-            <div class="pixel-art-earth">
-                🌍
-            </div>
+            <div class="pixel-art-earth">🌍</div>
 
-            <div class="leaves">
-                <div class="leaf">🍃</div>
-                <div class="leaf">🍂</div>
-                <div class="leaf">🍃</div>
+            <div class="star-rating">
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
             </div>
 
             <div class="lab-elements">
-                <span>🧪</span>
-                <span>🔬</span>
-                <span>📡</span>
+                <span class="lab-icon">🧪</span>
+                <span class="lab-icon">🔬</span>
+                <span class="lab-icon">📡</span>
             </div>
         </div>
 
@@ -274,12 +500,12 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="nickname">ENTER NICKNAME:</label>
+                <label for="nickname">► ENTER NICKNAME:</label>
                 <input type="text" id="nickname" name="nickname" placeholder="YOUR NAME" required>
             </div>
 
             <div class="form-group">
-                <label for="room_code">ROOM CODE (OPTIONAL):</label>
+                <label for="room_code">► ROOM CODE (OPTIONAL):</label>
                 <input type="text" id="room_code" name="room_code" placeholder="LEAVE BLANK TO CREATE">
             </div>
 
@@ -309,7 +535,7 @@
             const height = container.clientHeight;
             const dpr = window.devicePixelRatio || 1;
 
-            renderer.setPixelRatio(dpr);           // sharp on Retina screens
+            renderer.setPixelRatio(dpr);
             renderer.setSize(width, height, false);
 
             camera.aspect = width / height;
@@ -317,53 +543,101 @@
         }
 
         window.addEventListener('resize', resizeRenderer);
-        resizeRenderer(); // initial size
+        resizeRenderer();
 
         // Create Earth geometry
         const geometry = new THREE.SphereGeometry(2.5, 64, 64);
 
-        // Create canvas texture for Earth
+        // Create canvas texture for Earth - pixel art style
         const canvas = document.createElement('canvas');
-        canvas.width = 2048;
-        canvas.height = 1024;
+        canvas.width = 64;
+        canvas.height = 32;
         const ctx = canvas.getContext('2d');
 
-        // Ocean
-        ctx.fillStyle = '#4a90e2';
+        // Disable smoothing for pixel art look
+        ctx.imageSmoothingEnabled = false;
+
+        // Ocean - dark blue
+        ctx.fillStyle = '#0f3460';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Land
-        ctx.fillStyle = '#2d5016';
-        ctx.fillRect(100, 300, 200, 150); // N.America
-        ctx.fillRect(150, 520, 120, 180); // S.America
-        ctx.fillRect(750, 180, 140, 120); // Europe
-        ctx.fillRect(800, 380, 160, 240); // Africa
-        ctx.fillRect(980, 220, 320, 220); // Asia
-        ctx.fillRect(1280, 540, 120, 140); // Australia
-        ctx.fillRect(420, 130, 80, 100); // Greenland
+        // Land - pixelated green blocks
+        ctx.fillStyle = '#00c853';
+        
+        // North America
+        ctx.fillRect(3, 9, 6, 5);
+        ctx.fillRect(4, 14, 4, 3);
+        
+        // South America
+        ctx.fillRect(5, 17, 4, 6);
+        
+        // Europe
+        ctx.fillRect(23, 6, 4, 3);
+        
+        // Africa
+        ctx.fillRect(25, 12, 5, 7);
+        
+        // Asia
+        ctx.fillRect(31, 7, 10, 6);
+        ctx.fillRect(35, 13, 6, 4);
+        
+        // Australia
+        ctx.fillRect(40, 17, 4, 3);
+        
+        // Greenland
+        ctx.fillRect(13, 4, 3, 2);
+
+        // Add some pixel clouds
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fillRect(8, 6, 4, 2);
+        ctx.fillRect(28, 10, 3, 2);
+        ctx.fillRect(45, 8, 5, 2);
 
         const texture = new THREE.CanvasTexture(canvas);
+        texture.magFilter = THREE.NearestFilter;
+        texture.minFilter = THREE.NearestFilter;
+        
         const material = new THREE.MeshPhongMaterial({
             map: texture,
-            emissive: 0x333333,
-            emissiveIntensity: 0.3
+            emissive: 0x1a1a2e,
+            emissiveIntensity: 0.5
         });
 
         const earth = new THREE.Mesh(geometry, material);
         scene.add(earth);
 
+        // Add wireframe overlay for pixel effect
+        const wireframeGeometry = new THREE.WireframeGeometry(geometry);
+        const wireframeMaterial = new THREE.LineBasicMaterial({ 
+            color: 0x4facfe, 
+            transparent: true, 
+            opacity: 0.1 
+        });
+        const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+        wireframe.scale.set(1.01, 1.01, 1.01);
+        earth.add(wireframe);
+
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        const ambientLight = new THREE.AmbientLight(0x4facfe, 0.6);
         scene.add(ambientLight);
 
         const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(5, 3, 5);
         scene.add(directionalLight);
 
+        // Add point lights for glow effect
+        const pointLight1 = new THREE.PointLight(0x00c853, 0.5, 10);
+        pointLight1.position.set(-3, 2, 3);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xffd700, 0.3, 10);
+        pointLight2.position.set(3, -2, 3);
+        scene.add(pointLight2);
+
         // Animation
         function animate() {
             requestAnimationFrame(animate);
-            earth.rotation.y += 0.001;
+            earth.rotation.y += 0.002;
             renderer.render(scene, camera);
         }
         animate();

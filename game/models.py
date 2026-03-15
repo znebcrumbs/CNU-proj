@@ -1,10 +1,8 @@
 from django.db import models
 import uuid
-from dataclasses import dataclass
 
 class GameRoom(models.Model):
     code = models.CharField(max_length=8, unique=True)
-    is_active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -13,8 +11,9 @@ class Player(models.Model):
     nickname = models.CharField(max_length=20)
     room = models.ForeignKey(GameRoom, on_delete=models.CASCADE, related_name="players")
     accuracy = models.PositiveIntegerField(default=0)
-    is_turn = models.BooleanField(default=False)
+    turns_played = models.PositiveIntegerField(default=0)
     is_host = models.BooleanField(default=False)
+    is_finished = models.BooleanField(default=False)
     last_seen = models.DateTimeField(auto_now=True)  # Updated every time player sends data
 
     def __str__(self):
@@ -75,11 +74,11 @@ class SpecialCard(Card):
 class PlayerCard(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE)
     part_card = models.ForeignKey(PartCard, on_delete=models.CASCADE)
+    room = models.ForeignKey(GameRoom, on_delete=models.CASCADE)
+    is_used = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.player.nickname} - {self.part_card.name}"
-
-
 # @dataclass
 # class CardTable:
 #     table: dict = None

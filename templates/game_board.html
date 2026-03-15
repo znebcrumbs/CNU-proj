@@ -1,95 +1,247 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HAWAK-KARD | Game Board</title>
+    <title>HAWAK-KARD | Laboratory Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
-            background: radial-gradient(#1e1e1e, #000);
-            color: #eee;
-            font-family: monospace;
+            font-family: 'Press Start 2P', monospace;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
         }
-
-        .board {
-            display: grid;
-            grid-template-rows: 1fr auto 1fr;
-            height: 100vh;
-            padding: 10px;
-            gap: 10px;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #2d3561 0%, #1e2547 100%);
+            border: 4px solid #4a5568;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
+            border-radius: 8px;
+            position: relative;
         }
-
-        .zone {
-            border: 2px dashed #555;
-            padding: 10px;
-        }
-
-        .hand {
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 3px dashed #4facfe; padding-bottom: 15px; }
+        .section { margin-bottom: 20px; border: 3px solid #4a5568; padding: 15px; background: rgba(22, 33, 62, 0.8); border-radius: 8px; }
+        .section-title { font-size: 10px; color: #4facfe; margin-bottom: 10px; }
+        #battle-zone { 
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            border: 3px solid #ffd700;
+            padding: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #ffd700;
+            margin: 15px 0;
+            border-radius: 4px;
+            min-height: 100px;
             display: flex;
-            gap: 10px;
+            align-items: center;
             justify-content: center;
+            text-shadow: 2px 2px 0 #000;
         }
-
-        .card {
-            width: 90px;
-            height: 130px;
-            background: #f5e6d3;
-            color: #000;
-            border: 2px solid #333;
+        #player-hand { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 15px; }
+        .game-card {
+            width: 100px;
+            height: 140px;
+            border: 3px solid #82b1ff;
+            background: linear-gradient(145deg, #2962ff 0%, #0039cb 100%);
+            color: #fff;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 9px;
+            text-align: center;
+            padding: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 0 #002171;
         }
+        .game-card:hover { transform: translateY(-5px); box-shadow: 0 8px 0 #002171; }
+        .accuracy-container { margin: 15px 0; }
+        .accuracy-bar { height: 20px; background: #4a5568; border-radius: 10px; width: 100%; overflow: hidden; border: 2px solid #fff; }
+        .accuracy-fill { height: 100%; background: #00c853; width: 0%; transition: width 0.5s; }
+        #status { text-align: center; font-size: 10px; color: #4facfe; margin-top: 10px; height: 20px; }
+        
+        button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(145deg, #00c853 0%, #00a344 100%);
+            color: #fff;
+            border: none;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 6px 0 #007a33;
+            margin-top: 20px;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #007a33; }
+        button:active { transform: translateY(4px); box-shadow: 0 2px 0 #007a33; }
+        button.finish-btn { background: linear-gradient(145deg, #2962ff 0%, #0039cb 100%); box-shadow: 0 6px 0 #002171; display: none; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header">
+            <div style="color: #ffd700; font-size: 18px; margin-bottom: 5px;">HAWAK-KARD</div>
+            <div style="font-size: 10px;">MISSION IN PROGRESS: {{ room_code }}</div>
+        </div>
 
-<div class="board">
-    <div class="zone" id="enemy-zone">ENEMY ZONE</div>
+        <div class="section">
+            <div class="section-title">📊 WATER POLLUTION ANALYSIS ACCURACY</div>
+            <div class="accuracy-container">
+                <div class="accuracy-bar"><div id="accuracy-fill" class="accuracy-fill"></div></div>
+                <div style="display: flex; justify-content: space-between; font-size: 10px; margin-top: 5px;">
+                    <span id="turns-text">TURNS: 0/10</span>
+                    <span id="accuracy-text">0%</span>
+                </div>
+            </div>
+        </div>
 
-    <div class="zone" id="battle-zone">⚔ BATTLE ZONE ⚔</div>
+        <div class="section">
+            <div class="section-title">📡 CURRENT OBJECTIVE</div>
+            <div id="battle-zone">INITIALIZING MISSION...</div>
+        </div>
 
-    <div class="zone">
-        <div class="hand" id="player-hand"></div>
+        <div class="section">
+            <div class="section-title">🎒 YOUR EQUIPMENT</div>
+            <div id="player-hand"></div>
+        </div>
+
+        <div id="status"></div>
+        
+        <button id="finish-btn" class="finish-btn">► FINISH MISSION & VIEW LEADERBOARD ◄</button>
     </div>
-</div>
 
-<script>
-    const roomCode = "{{ room_code }}";
+    <script>
+        const roomCode = "{{ room_code }}";
+        let currentObjectiveId = null;
+        let cardsDisabled = false;
 
-    const socket = new WebSocket(
-        "ws://" + window.location.host + "/ws/game/" + roomCode + "/"
-    );
-
-    socket.onmessage = (e) => {
-        const data = JSON.parse(e.data);
-
-        if (data.type === "hand") {
-            renderHand(data.cards);
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
-    };
+        const csrftoken = getCookie('csrftoken');
 
-    function renderHand(cards) {
-        const hand = document.getElementById("player-hand");
-        hand.innerHTML = "";
+        async function startMission() {
+            const response = await fetch(`/api/room/${roomCode}/start/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrftoken }
+            });
+            const data = await response.json();
 
-        cards.forEach(card => {
-            const div = document.createElement("div");
-            div.className = "card";
-            div.innerText = card.name;
-            div.onclick = () => playCard(card.id);
-            hand.appendChild(div);
-        });
-    }
+            if (!response.ok) {
+                document.getElementById('battle-zone').textContent = data.error || "Failed to start mission.";
+                return;
+            }
 
-    function playCard(cardId) {
-        socket.send(JSON.stringify({
-            action: "play_card",
-            card_id: cardId
-        }));
-    }
-</script>
+            renderHand(data.hand);
+            document.getElementById('battle-zone').textContent = data.objective;
+            currentObjectiveId = data.objective_id;
+            updateAccuracy(data.accuracy);
+            document.getElementById('turns-text').textContent = `TURNS: ${data.turns_played}/10`;
 
+            if (data.turns_played >= 10) {
+                showGameOver();
+            }
+        }
+
+        function renderHand(cards) {
+            const hand = document.getElementById("player-hand");
+            hand.innerHTML = "";
+            cards.forEach(card => {
+                const div = document.createElement("div");
+                div.className = "game-card";
+                div.textContent = card.name;
+                div.onclick = () => { if (!cardsDisabled) playCard(card.id); };
+                hand.appendChild(div);
+            });
+        }
+
+        async function playCard(cardId) {
+            cardsDisabled = true;
+            try {
+                const response = await fetch(`/api/room/${roomCode}/play/`, {
+                    method: 'POST',
+                    headers: { 
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        part_card_id: cardId,
+                        objective_id: currentObjectiveId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    updateStatus("ERROR: " + (data.error || "Unknown error"));
+                    cardsDisabled = false;
+                    return;
+                }
+
+                updateStatus(data.result.toUpperCase());
+                updateAccuracy(data.accuracy);
+                document.getElementById('turns-text').textContent = `TURNS: ${data.turns_played}/10`;
+
+                if (data.game_over) {
+                    showGameOver();
+                } else {
+                    renderHand(data.hand);
+                    document.getElementById('battle-zone').textContent = data.next_objective;
+                    currentObjectiveId = data.next_objective_id;
+                    cardsDisabled = false;
+                }
+            } catch (err) {
+                updateStatus("ERROR: Network failure");
+                cardsDisabled = false;
+            }
+        }
+
+        function showGameOver() {
+            document.getElementById('finish-btn').style.display = 'block';
+            document.getElementById('battle-zone').textContent = "MISSION OBJECTIVES COMPLETE!";
+            document.getElementById('player-hand').innerHTML = "";
+            cardsDisabled = true;
+        }
+
+        function updateAccuracy(val) {
+            document.getElementById('accuracy-fill').style.width = val + '%';
+            document.getElementById('accuracy-text').textContent = val + '%';
+        }
+
+        function updateStatus(msg) {
+            const status = document.getElementById("status");
+            status.textContent = `► ${msg}`;
+            status.style.color = msg === 'CORRECT' ? '#00c853' : '#ff1744';
+            setTimeout(() => { if (status.textContent === `► ${msg}`) status.textContent = ""; }, 2000);
+        }
+
+        document.getElementById('finish-btn').onclick = async () => {
+            await fetch(`/api/room/${roomCode}/finish/`, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': csrftoken }
+            });
+            window.location.href = `/room/${roomCode}/`;
+        };
+
+        startMission();
+    </script>
 </body>
 </html>

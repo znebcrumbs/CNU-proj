@@ -2,479 +2,134 @@
 <html>
 <head>
     <title>HAWAK-KARD Room {{ room_code }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Courier New', monospace;
-            background: linear-gradient(135deg, #d4a574 0%, #c9945e 50%, #8b7355 100%);
-            color: #3d2817;
-            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
+            font-family: 'Press Start 2P', monospace;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
             min-height: 100vh;
             padding: 20px;
             position: relative;
+            overflow-x: hidden;
         }
-
-        .rotating-earth {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 500px;
-            height: 500px;
-            opacity: 0.25;
-            animation: rotate 120s linear infinite;
-            z-index: 0;
-            pointer-events: none;
-            filter: brightness(1.2);
-        }
-
-        @keyframes rotate {
-            0% { transform: translate(-50%, -50%) rotateY(0deg); }
-            100% { transform: translate(-50%, -50%) rotateY(360deg); }
-        }
-
-        #earth-container {
-             position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100vw;
-            height: 50vh;
-            z-index: 0;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #earth-container canvas {
-            display: block !important;
-            width: 80vw !important;
-            height: 80vh !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            aspect-ratio: auto !important;
-        }
-
         .container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
-            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
-            border: 4px solid #8b6f47;
+            background: linear-gradient(145deg, #2d3561 0%, #1e2547 100%);
+            border: 4px solid #4a5568;
             padding: 25px;
-            box-shadow: 0 0 20px rgba(139, 111, 71, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.4);
+            border-radius: 8px;
             position: relative;
-            z-index: 1;
+            z-index: 10;
         }
-
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(139, 111, 71, 0.03) 0px,
-                    rgba(139, 111, 71, 0.03) 2px,
-                    transparent 2px,
-                    transparent 4px
-                ),
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(139, 111, 71, 0.03) 0px,
-                    rgba(139, 111, 71, 0.03) 2px,
-                    transparent 2px,
-                    transparent 4px
-                );
-            pointer-events: none;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 3px dashed #8b6f47;
-            padding-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .title {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #5d4e37;
-            letter-spacing: 2px;
-        }
-
-        .room-code {
-            font-size: 16px;
-            color: #5d4e37;
-            letter-spacing: 3px;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 10px;
-            border: 2px solid #8b6f47;
-            margin-top: 10px;
-        }
-
-        .leaves {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-            font-size: 20px;
-        }
-
-        .leaf {
-            animation: sway 3s ease-in-out infinite;
-        }
-
-        @keyframes sway {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        .section {
-            margin-bottom: 25px;
-            border: 3px solid #8b6f47;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.7);
-            position: relative;
-            z-index: 1;
-        }
-
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #8b6f47 0%, #c4a57b 50%, #8b6f47 100%);
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-            color: #5d4e37;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        #player-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        #player-list li {
-            padding: 10px;
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 3px dashed #4facfe; padding-bottom: 15px; }
+        .room-code { font-size: 12px; color: #4facfe; letter-spacing: 3px; background: #1a1a2e; padding: 12px; border: 3px solid #4a5568; margin-top: 15px; border-radius: 4px; }
+        .section { margin-bottom: 20px; border: 3px solid #4a5568; padding: 15px; background: rgba(30, 37, 71, 0.8); border-radius: 8px; }
+        .section-title { font-size: 10px; font-weight: bold; margin-bottom: 15px; color: #4facfe; }
+        #player-list { list-style: none; }
+        .player-item {
+            padding: 12px;
             margin-bottom: 8px;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 235, 220, 0.9) 100%);
-            border-left: 4px solid #c4a57b;
-            border-bottom: 1px solid #d4a574;
-            font-size: 12px;
-            letter-spacing: 1px;
-            color: #3d2817;
-        }
-
-        #button-container {
+            background: #2d3561;
+            border-left: 4px solid #4facfe;
+            font-size: 10px;
             display: flex;
-            gap: 15px;
-            margin-top: 15px;
-            position: relative;
-            z-index: 1;
+            justify-content: space-between;
+            align-items: center;
         }
+        .player-item.host { border-left-color: #ffd700; }
+        .accuracy-badge { background: #00c853; padding: 4px 8px; border-radius: 4px; font-size: 8px; }
+        .finished-badge { color: #ffd700; margin-left: 10px; }
 
         button {
-            flex: 1;
-            padding: 12px;
-            background: linear-gradient(135deg, #c4a57b 0%, #9d8b6d 100%);
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(145deg, #00c853 0%, #00a344 100%);
             color: #fff;
-            border: 3px solid #5d4e37;
-            font-family: 'Courier New', monospace;
+            border: none;
+            font-family: 'Press Start 2P', monospace;
             font-size: 12px;
-            font-weight: bold;
             cursor: pointer;
-            letter-spacing: 1px;
-            transition: all 0.1s;
-            box-shadow: 3px 3px 0 rgba(93, 78, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            text-transform: uppercase;
-            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        button:hover {
-            background: linear-gradient(135deg, #d4a574 0%, #a89d70 100%);
-            box-shadow: 5px 5px 0 rgba(93, 78, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            transform: translate(-2px, -2px);
-        }
-
-        button:active {
-            box-shadow: 1px 1px 0 rgba(93, 78, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            transform: translate(1px, 1px);
-        }
-
-        #status {
-            text-align: center;
-            padding: 15px;
-            font-size: 14px;
-            color: #5d4e37;
-            background: linear-gradient(135deg, #fffbf0 0%, #f5e6d3 100%);
-            border: 2px solid #c4a57b;
-            letter-spacing: 1px;
+            box-shadow: 0 6px 0 #007a33;
+            border-radius: 4px;
             margin-top: 15px;
-            position: relative;
-            z-index: 1;
         }
-
-        .lab-elements {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-            font-size: 18px;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 11px;
-            color: #5d4e37;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
-        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 0 #007a33; }
+        button:active { transform: translateY(4px); box-shadow: 0 2px 0 #007a33; }
+        
+        #status { text-align: center; padding: 15px; font-size: 10px; color: #4facfe; }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
-    <div id="earth-container" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></div>
-    <div class="container" style="position: relative; z-index: 1;">
+    <div class="container">
         <div class="header">
-            <div class="title">⚗ HAWAK-KARD ⚗</div>
+            <div style="color: #ffd700; font-size: 20px;">HAWAK-KARD</div>
             <div class="room-code">ROOM: {{ room_code }}</div>
-            
-            <div class="leaves">
-                <div class="leaf">🍃</div>
-                <div class="leaf">🍂</div>
-                <div class="leaf">🍃</div>
-            </div>
-
-            <div class="lab-elements">
-                <span>🧪</span>
-                <span>🌍</span>
-                <span>📡</span>
-            </div>
         </div>
 
         <div class="section">
-            <div class="section-title">🔬 LABORATORY TEAM</div>
-            <ul id="player-list"></ul>
+            <div class="section-title">📊 LABORATORY LEADERBOARD</div>
+            <div id="player-list">
+                <!-- Players will be loaded here via AJAX -->
+            </div>
         </div>
 
         <div class="section">
             <div class="section-title">⚡ MISSION CONTROL</div>
-            <div id="button-container"></div>
+            <button onclick="window.location.href='/game/{{ room_code }}/'">► GO TO LAB ◄</button>
         </div>
-        <div class="section" id="game-board" style="display:none;">
-    <div class="section-title">🃏 GAME BOARD</div>
 
-    <div id="enemy-zone">ENEMY ZONE</div>
-
-    <div id="battle-zone" style="margin:10px 0;">
-        ⚔ BATTLE ZONE ⚔
-    </div>
-
-    <div id="hand-zone">
-        <div id="player-hand" style="display:flex; gap:10px;"></div>
-    </div>
-</div>
-        <div id="status"></div>
-
-        <div class="footer">
-            ~ PRESERVING THE ECOSYSTEM ONE BYTE AT A TIME ~
-        </div>
+        <div id="status">Updating leaderboard...</div>
     </div>
 
     <script>
         const roomCode = "{{ room_code }}";
-        const playerId = {{ player_id }};
-        let isCurrentPlayerHost = false;
 
-        const socket = new WebSocket(
-            "ws://" + window.location.host + "/ws/game/" + roomCode + "/"
-        );
-
-        socket.onopen = () => {
-            console.log("Connected to game room");
-        };
-
-        socket.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-
-            if (data.type === "player_list") {
+        async function updateLeaderboard() {
+            try {
+                const response = await fetch(`/api/room/${roomCode}/leaderboard/`);
+                const data = await response.json();
+                
                 const list = document.getElementById("player-list");
                 list.innerHTML = "";
 
-                // Check if any player is host, if not, first player becomes host
-                const hasHost = data.players.some(p => p.is_host);
-                if (!hasHost && data.players.length > 0) {
-                    data.players[0].is_host = true;
-                }
-
                 data.players.forEach(p => {
-                    const li = document.createElement("li");
-                    const hostLabel = p.is_host ? " [HOST]" : "";
-                    li.innerText = `${p.nickname} (${p.id})${hostLabel}`;
-                    list.appendChild(li);
-
-                    // Check if current player is the host
-                    if (p.id === playerId && p.is_host) {
-                        isCurrentPlayerHost = true;
+                    const div = document.createElement("div");
+                    div.className = `player-item ${p.role === 'Host' ? 'host' : ''}`;
+                    
+                    const nameSpan = document.createElement("span");
+                    nameSpan.textContent = `${p.nickname} (${p.role})`;
+                    
+                    if (p.is_finished) {
+                        const badge = document.createElement("span");
+                        badge.className = "finished-badge";
+                        badge.textContent = " ✓ COMPLETE";
+                        nameSpan.appendChild(badge);
                     }
+                    
+                    const accBadge = document.createElement("span");
+                    accBadge.className = "accuracy-badge";
+                    accBadge.textContent = `${p.accuracy}% ACCURACY`;
+                    
+                    div.appendChild(nameSpan);
+                    div.appendChild(accBadge);
+                    list.appendChild(div);
                 });
-
-                // Update button container
-                const buttonContainer = document.getElementById("button-container");
-                buttonContainer.innerHTML = "";
-
-                if (isCurrentPlayerHost) {
-                    const startBtn = document.createElement("button");
-                    startBtn.id = "start-btn";
-                    startBtn.innerText = "► START MISSION ◄";
-                    startBtn.onclick = () => {
-                        socket.send(JSON.stringify({
-                            action: "start_game"
-                        }));
-                    };
-                    buttonContainer.appendChild(startBtn);
-                } else {
-                    const readyBtn = document.createElement("button");
-                    readyBtn.id = "ready-btn";
-                    readyBtn.innerText = "✓ READY";
-                    readyBtn.onclick = () => {
-                        socket.send(JSON.stringify({
-                            action: "player_ready"
-                        }));
-                    };
-                    buttonContainer.appendChild(readyBtn);
-                }
-            }
-
-           if (data.type === "game_started") {
-            window.location.href = "/game/" + roomCode + "/";
-            }
                 
-        };
+                document.getElementById('status').innerText = "Last updated: " + new Date().toLocaleTimeString();
+            } catch (e) {
+                console.error("Leaderboard fetch failed", e);
+                document.getElementById('status').innerText = "⚠ Connection error";
+            }
+        }
 
-        // Create 3D Earth with Three.js
-    // Three.js scene setup
-    const container = document.getElementById('earth-container');
-    const scene = new THREE.Scene();
-
-    // Camera
-    const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-    );
-    camera.position.z = 3;
-
-    // Renderer (high-DPI friendly)
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    container.appendChild(renderer.domElement);
-
-    function resizeRenderer() {
-        const width = container.clientWidth;
-        const height = container.clientHeight;
-        const dpr = window.devicePixelRatio || 1;
-
-        renderer.setPixelRatio(dpr);           // sharp on Retina screens
-        renderer.setSize(width, height, false);
-
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-    }
-
-    window.addEventListener('resize', resizeRenderer);
-    resizeRenderer(); // initial size
-
-    // Create Earth geometry
-    const geometry = new THREE.SphereGeometry(2.5, 64, 64);
-
-    // Create canvas texture for Earth
-    const canvas = document.createElement('canvas');
-    canvas.width = 2048;
-    canvas.height = 1024;
-    const ctx = canvas.getContext('2d');
-
-    // Ocean
-    ctx.fillStyle = '#4a90e2';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Land
-    ctx.fillStyle = '#2d5016';
-    ctx.fillRect(100, 300, 200, 150); // N.America
-    ctx.fillRect(150, 520, 120, 180); // S.America
-    ctx.fillRect(750, 180, 140, 120); // Europe
-    ctx.fillRect(800, 380, 160, 240); // Africa
-    ctx.fillRect(980, 220, 320, 220); // Asia
-    ctx.fillRect(1280, 540, 120, 140); // Australia
-    ctx.fillRect(420, 130, 80, 100); // Greenland
-
-    const texture = new THREE.CanvasTexture(canvas);
-    const material = new THREE.MeshPhongMaterial({
-        map: texture,
-        emissive: 0x333333,
-        emissiveIntensity: 0.4
-    });
-
-    const earth = new THREE.Mesh(geometry, material);
-    scene.add(earth);
-
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 3, 5);
-    scene.add(directionalLight);
-
-    // Animation
-    function animate() {
-        requestAnimationFrame(animate);
-        earth.rotation.y += 0.0005;
-        renderer.render(scene, camera);
-    }
-    animate();
-    function renderHand(cards) {
-    const hand = document.getElementById("player-hand");
-    hand.innerHTML = "";
-
-    cards.forEach(c => {
-        const div = document.createElement("div");
-        div.style.width = "80px";
-        div.style.height = "120px";
-        div.style.border = "2px solid #5d4e37";
-        div.style.background = "#f5e6d3";
-        div.style.display = "flex";
-        div.style.alignItems = "center";
-        div.style.justifyContent = "center";
-        div.style.cursor = "pointer";
-        div.innerText = c.name;
-
-        div.onclick = () => playCard(c.id);
-
-        hand.appendChild(div);
-    });
-}
-</script>
+        // Poll every 5 seconds
+        updateLeaderboard();
+        const intervalId = setInterval(updateLeaderboard, 5000);
+        window.addEventListener('beforeunload', () => clearInterval(intervalId));
+    </script>
 </body>
 </html>
