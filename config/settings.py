@@ -145,3 +145,9 @@ MEDIA_ROOT = BASE_DIR
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import sys
+
+if "vercel" in sys.argv:
+    from django.core.management import call_command
+    call_command("migrate")
